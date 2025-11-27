@@ -13,12 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('hospital_id')->nullable()->constrained('hospitals')->onDelete('cascade');
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['superadmin', 'admin', 'doctor', 'attendant'])->default('attendant');
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('last_login_at')->nullable();
+            $table->string('profile_photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            
+            // Indexes for better query performance
+            $table->index('hospital_id');
+            $table->index('role');
         });
     }
 
