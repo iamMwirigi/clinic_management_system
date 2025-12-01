@@ -13,14 +13,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create SuperAdmin (not tied to any hospital)
-        \App\Models\User::create([
+        \App\Models\SuperAdmin::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@hospital.com',
             'password' => bcrypt('password'), // Change this in production!
-            'role' => 'superadmin',
             'phone' => '+254700000000',
-            'is_active' => true,
-            'hospital_id' => null,
         ]);
 
         // Create a demo hospital
