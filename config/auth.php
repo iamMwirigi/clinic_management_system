@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Hash;
+
 return [
 
     /*
@@ -31,13 +33,23 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
-    | Supported: "session"
-    |
     */
 
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'super_admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'super_admins',
+        ],
+        'admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'admins',
+        ],
+        'user' => [
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],
@@ -55,7 +67,12 @@ return [
     | sources which represent each model / table. These sources may then
     | be assigned to any extra authentication guards you have defined.
     |
-    | Supported: "database", "eloquent"
+    | Example:
+    |
+    | 'users' => [
+    |     'driver' => 'eloquent',
+    |     'model' => App\Models\User::class,
+    | ],
     |
     */
 
@@ -63,6 +80,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'super_admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\SuperAdmin::class,
+            'table' => 'super_admins',
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+            'table' => 'admins',
         ],
 
         // 'users' => [
@@ -77,16 +104,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | You may specify multiple password reset configurations if you have more
-    | than one user table or model in the application and you want to have
-    | separate password reset settings based on the specific user types.
-    |
-    | The expiry time is the number of minutes that each reset token will be
-    | considered valid. This security feature keeps tokens short-lived so
-    | they have less time to be guessed. You may change this as needed.
-    |
-    | The throttle setting is the number of seconds a user must wait before
-    | generating more password reset tokens. This prevents the user from
-    | quickly generating a very large amount of password reset tokens.
+    | than one user table or model. Each configuration contains the name of
+    | the user provider that corresponds to this set of credentials. By
+    | default, the "users" provider has been defined for you.
     |
     */
 
@@ -104,9 +124,8 @@ return [
     | Password Confirmation Timeout
     |--------------------------------------------------------------------------
     |
-    | Here you may define the amount of seconds before a password confirmation
-    | times out and the user is prompted to re-enter their password via the
-    | confirmation screen. By default, the timeout lasts for three hours.
+    | Here you may define the amount of seconds before password confirmation
+    | times out and the user is prompted to re-enter their password.
     |
     */
 

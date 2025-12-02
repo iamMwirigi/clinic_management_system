@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\SuperAdminController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('super-admins', SuperAdminController::class)->only(['index', 'store']);
+// Universal Authentication Routes
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::apiResource('super-admins', SuperAdminController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('admins', AdminController::class)->only(['index', 'show', 'update', 'destroy', 'store']);
+});
