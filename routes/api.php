@@ -29,4 +29,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('super-admins', SuperAdminController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('admins', AdminController::class)->only(['index', 'show', 'update', 'destroy', 'store']);
     Route::apiResource('hospitals', \App\Http\Controllers\Api\HospitalController::class);
+    Route::apiResource('doctors', \App\Http\Controllers\Api\DoctorController::class);
 });
