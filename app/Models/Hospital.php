@@ -16,71 +16,21 @@ class Hospital extends Model
      */
     protected $fillable = [
         'name',
-        'email',
-        'phone',
         'address',
-        'paybill_number',
-        'subscription_status',
+        'county',
+        'phone',
+        'email',
+        'logo_url',
         'subscription_plan',
-        'subscription_expires_at',
-        'settings',
+        'is_active',
     ];
 
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
-        'subscription_expires_at' => 'datetime',
-        'settings' => 'array',
+        'is_active' => 'boolean',
     ];
-
-    /**
-     * Get the users for the hospital.
-     */
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
-    /**
-     * Get admins for the hospital.
-     */
-    public function admins()
-    {
-        return $this->users()->where('role', 'admin');
-    }
-
-    /**
-     * Get doctors for the hospital.
-     */
-    public function doctors()
-    {
-        return $this->users()->where('role', 'doctor');
-    }
-
-    /**
-     * Get attendants for the hospital.
-     */
-    public function attendants()
-    {
-        return $this->users()->where('role', 'attendant');
-    }
-
-    /**
-     * Check if the hospital's subscription is active.
-     */
-    public function isSubscriptionActive(): bool
-    {
-        if ($this->subscription_status !== 'active') {
-            return false;
-        }
-
-        if ($this->subscription_expires_at === null) {
-            return true;
-        }
-
-        return $this->subscription_expires_at->isFuture();
-    }
 }
