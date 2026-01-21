@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('specialties', function (Blueprint $table) {
+        Schema::create('attendants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hospital_id')->constrained('hospitals')->onDelete('cascade');
-            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
-            $table->string('specialty_name', 100);
-            $table->text('description')->nullable();
-            $table->decimal('consultation_fee', 10, 2);
+            $table->string('email', 100)->unique();
+            $table->string('phone', 15)->nullable();
+            $table->string('password_hash', 255);
+            $table->timestamp('last_login_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specialties');
+        Schema::dropIfExists('attendants');
     }
 };

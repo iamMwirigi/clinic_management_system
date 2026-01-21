@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Doctor extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+
+class Doctor extends Authenticatable
 {
-    use HasFactory, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +25,7 @@ class Doctor extends Model
         'last_name',
         'email',
         'phone_number',
+        'password',
         'gender',
         'date_of_birth',
         'license_number',
@@ -47,6 +52,15 @@ class Doctor extends Model
         'date_of_birth' => 'date',
         'is_available' => 'boolean',
         'consultation_fee' => 'decimal:2',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
     ];
 
     /**

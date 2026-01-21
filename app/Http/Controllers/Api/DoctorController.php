@@ -68,21 +68,25 @@ class DoctorController extends Controller
             'emergency_contact_phone' => 'nullable|string|max:20',
             'status' => ['nullable', Rule::in(['active', 'inactive', 'suspended'])],
             'profile_photo' => 'nullable|string|max:255',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        $validatedData = $validator->validated();
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
         // Additional security for admins
         if ($user instanceof \App\Models\Admin &&
-            $user->hospital_id != $validator->validated()['hospital_id']) {
+            $user->hospital_id != $validatedData['hospital_id']) {
             return response()->json([
                 'message' => 'You can only add doctors to your own hospital.'
             ], 403);
         }
 
-        $doctor = Doctor::create($validator->validated());
+        $doctor = Doctor::create($validatedData);
 
         return response()->json($doctor, 201);
     }
@@ -141,10 +145,16 @@ class DoctorController extends Controller
             'emergency_contact_phone' => 'nullable|string|max:20',
             'status' => ['nullable', Rule::in(['active', 'inactive', 'suspended'])],
             'profile_photo' => 'nullable|string|max:255',
+            'password' => 'sometimes|string|min:8',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
+        }
+
+        $validatedData = $validator->validated();
+        if (isset($validatedData['password'])) {
+            $validatedData['password'] = bcrypt($validatedData['password']);
         }
 
         // Admin cannot move doctor to another hospital
