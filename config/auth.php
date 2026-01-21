@@ -41,15 +41,23 @@ return [
             'provider' => 'users',
         ],
         'super_admin' => [
-            'driver' => 'sanctum',
+            'driver' => 'jwt',
             'provider' => 'super_admins',
         ],
         'admin' => [
-            'driver' => 'sanctum',
+            'driver' => 'jwt',
             'provider' => 'admins',
         ],
-        'user' => [
-            'driver' => 'sanctum',
+        'doctor' => [
+            'driver' => 'jwt',
+            'provider' => 'doctors',
+        ],
+        'attendant' => [
+            'driver' => 'jwt',
+            'provider' => 'attendants',
+        ],
+        'api' => [
+            'driver' => 'jwt',
             'provider' => 'users',
         ],
     ],
@@ -84,18 +92,19 @@ return [
         'super_admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\SuperAdmin::class,
-            'table' => 'super_admins',
         ],
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
-            'table' => 'admins',
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doctor::class,
+        ],
+        'attendants' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Attendant::class,
+        ],
     ],
 
     /*

@@ -17,14 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // Universal Authentication Routes
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/refresh', [AuthController::class, 'refresh']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:super_admin,admin,doctor,attendant')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('super-admins', SuperAdminController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('admins', AdminController::class)->only(['index', 'show', 'update', 'destroy', 'store']);
